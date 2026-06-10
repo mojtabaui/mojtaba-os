@@ -1,10 +1,10 @@
 'use client'
-import { useState, useTransition } from 'react'
+import { useState, useTransition, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [username, setUsername] = useState('')
@@ -40,7 +40,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left — Black panel */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -74,7 +73,6 @@ export default function LoginPage() {
         <p className="text-[10px] text-[#2A2A2A]">© 2026 Mojtaba Yazdanpanah</p>
       </motion.div>
 
-      {/* Right — Cream panel */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -82,9 +80,7 @@ export default function LoginPage() {
         className="flex-1 bg-cream-200 flex items-center justify-center p-8"
       >
         <div className="w-full max-w-[340px]">
-          {/* Mobile logo */}
           <p className="text-[11px] text-[#A09388] uppercase tracking-[0.15em] font-medium mb-8 lg:hidden">Mojtaba OS</p>
-
           <h2 className="text-2xl font-semibold text-ink-200 mb-1">Welcome back</h2>
           <p className="text-[13px] text-[#A09388] mb-8">Sign in to your workspace</p>
 
@@ -155,5 +151,13 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
