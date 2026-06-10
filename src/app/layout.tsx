@@ -1,14 +1,6 @@
 import type { Metadata } from 'next'
-import { Vazirmatn } from 'next/font/google'
 import './globals.css'
 import { LangProvider } from '@/lib/lang-provider'
-
-const vazirmatn = Vazirmatn({
-  subsets: ['arabic', 'latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-vazir',
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Mojtaba OS',
@@ -17,8 +9,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning className={vazirmatn.variable}>
-      <body>
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body style={{ fontFamily: 'Vazirmatn, sans-serif' }}>
         <LangProvider>{children}</LangProvider>
       </body>
     </html>
