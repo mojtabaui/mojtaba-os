@@ -6,7 +6,7 @@ import { PRIORITY_CONFIG, formatDate } from '@/lib/utils'
 import type { Priority } from '@/lib/utils'
 import type { Goal } from '@/lib/store'
 import { AppShell } from '@/components/layout/AppShell'
-import { Target, Plus, X, TrendingUp, CheckCircle2 } from 'lucide-react'
+import { Target, Plus, X, CheckCircle2 } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
 function GoalCard({ goal, onUpdate, onDelete }: { goal: Goal; onUpdate: (u: Partial<Goal>) => void; onDelete: () => void }) {

@@ -3,15 +3,6 @@ import { useState, useTransition, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 
-const WALLPAPER = {
-  background: `
-    radial-gradient(ellipse 90% 70% at 5% 50%, rgba(76,29,149,0.7) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 60% at 85% 75%, rgba(17,24,83,0.65) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 50% at 45% 15%, rgba(109,40,217,0.35) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 30% 80%, rgba(30,58,138,0.4) 0%, transparent 55%),
-    linear-gradient(145deg, #0c0818 0%, #080614 45%, #050410 100%)
-  `,
-}
 
 export default function LoginPage() {
   const router = useRouter()
@@ -64,11 +55,11 @@ export default function LoginPage() {
   return (
     <div className="fixed inset-0 overflow-hidden flex flex-col">
       {/* Wallpaper */}
-      <div className="absolute inset-0" style={WALLPAPER} />
       <div
-        className="absolute inset-0 opacity-[0.025]"
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
+        className="absolute inset-0"
+        style={{ backgroundImage: 'url(/wallpaper/wallpaper.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
       />
+      <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.45)' }} />
 
       {/* Time — top center */}
       <div className="relative z-10 text-center pt-16 pointer-events-none">

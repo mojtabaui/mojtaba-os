@@ -9,23 +9,6 @@ import { useT } from '@/lib/i18n'
 
 type Skill = 'reading' | 'listening' | 'writing' | 'speaking' | 'vocabulary' | 'grammar'
 
-const SKILL_ICONS: Record<Skill, React.ElementType> = {
-  reading: Eye,
-  listening: Headphones,
-  writing: PenLine,
-  speaking: Mic,
-  vocabulary: BookMarked,
-  grammar: BookOpen,
-}
-
-const SKILL_COLORS: Record<Skill, string> = {
-  reading: '#3B82F6',
-  listening: '#A855F7',
-  writing: '#F97316',
-  speaking: '#22C55E',
-  vocabulary: '#EAB308',
-  grammar: '#EF4444',
-}
 
 function StreakCalendar({ sessions }: { sessions: { date: string }[] }) {
   const today = new Date()

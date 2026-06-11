@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { PRIORITY_CONFIG, formatTime } from '@/lib/utils'
+import { PRIORITY_CONFIG } from '@/lib/utils'
 import type { Priority } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
 import { Clock, AlertTriangle, TrendingUp, Edit2, Check, X } from 'lucide-react'

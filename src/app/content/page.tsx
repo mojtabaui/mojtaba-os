@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import type { ContentItem } from '@/lib/store'
 import { AppShell } from '@/components/layout/AppShell'
-import { Rss, Plus, X, Image, Film, FileText, LayoutGrid, Star, Zap } from 'lucide-react'
+import { Rss, Plus, X, Film, FileText, LayoutGrid, Star, Zap } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
 type ContentStatus = ContentItem['status']
@@ -149,7 +149,6 @@ export default function ContentPage() {
   const t = useT()
   const { content, updateContent, deleteContent } = useStore()
   const [showAdd, setShowAdd] = useState(false)
-  const [view, setView] = useState<'pipeline' | 'grid'>('pipeline')
   const [filterType, setFilterType] = useState<ContentType | 'all'>('all')
 
   const PIPELINE: PipelineStage[] = [

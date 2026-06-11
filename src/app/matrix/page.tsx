@@ -19,7 +19,6 @@ type QuadrantDef = { key: Quadrant; title: string; subtitle: string; urgent: boo
 function classifyTask(task: Task): Quadrant {
   const priorityOrder = { p1: 0, p2: 1, p3: 2, p4: 3, p5: 4 }
   const isHighPriority = priorityOrder[task.priority] <= 1
-  const _d = new Date(); const today = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`
   const _u = new Date(Date.now() + 3*86400000); const urgentCutoff = `${_u.getFullYear()}-${String(_u.getMonth()+1).padStart(2,'0')}-${String(_u.getDate()).padStart(2,'0')}`
   const isUrgent = task.dueDate ? task.dueDate <= urgentCutoff : false
 

@@ -40,7 +40,7 @@ const stagger = {
 export default function DashboardPage() {
   const { tasks, events, ieltsSessions, migrations, students, language, completedEventIds, toggleEventComplete } = useStore()
   const t = useT()
-  const { gregorian, jalaliShort } = getTodayBoth()
+  const { gregorian } = getTodayBoth()
   const today = getLocalToday()
   const isRtl = language === 'fa'
 
@@ -79,8 +79,6 @@ export default function DashboardPage() {
   // Migration progress
   const applied = migrations.filter(m => ['applied', 'interview', 'waiting', 'accepted'].includes(m.status)).length
   const pendingStudents = students.filter(s => s.pendingResponse).length
-
-  const focusLabels = t.dashboard.focusLabels as unknown as string[]
 
   return (
     <motion.div

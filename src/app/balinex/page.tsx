@@ -2,9 +2,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate, formatTime } from '@/lib/utils'
+import { STATUS_CONFIG, formatDate } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
-import { Briefcase, CheckCircle2, Clock, Circle, Users, LayoutGrid, List, Plus, Calendar } from 'lucide-react'
+import { Briefcase, CheckCircle2, Clock, Circle, Calendar } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
 const CATEGORIES = ['All', 'Design', 'Product', 'Research', 'Meeting', 'Collaboration']
@@ -162,7 +162,7 @@ export default function BalinexPage() {
             {/* Today sidebar */}
             <div className="space-y-3">
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-4">
-                <h3 className="text-[12px] font-semibold text-ink-200 mb-3">Today's Schedule</h3>
+                <h3 className="text-[12px] font-semibold text-ink-200 mb-3">Today&apos;s Schedule</h3>
                 {todayEvents.length === 0 ? (
                   <p className="text-[11px] text-[#C4B9AD] py-4 text-center">No meetings today</p>
                 ) : (

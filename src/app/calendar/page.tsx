@@ -110,7 +110,6 @@ export default function CalendarPage() {
   const [view, setView] = useState<'month' | 'week' | 'agenda'>('month')
   const [showAdd, setShowAdd] = useState(false)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [hoverDate, setHoverDate] = useState<string | null>(null)
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -207,7 +206,6 @@ export default function CalendarPage() {
                 const dayEvents = getEventsForDate(date)
                 const dateStr = toLocalDateStr(date)
                 const isT = isToday(date)
-                const isSelected = selectedDate === dateStr
                 const jDay = showJalali ? getJalaliLabel(date) : null
 
                 return (

@@ -5,7 +5,7 @@ import { useStore } from '@/lib/store'
 import { formatDate } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
 import type { Student } from '@/lib/store'
-import { GraduationCap, Users, MessageSquare, Clock, Plus, X, CheckCircle2, AlertCircle, BookOpen } from 'lucide-react'
+import { GraduationCap, Users, Plus, AlertCircle } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
 const COURSE_STAGES = ['Idea', 'Research', 'Outline', 'Recording', 'Editing', 'Uploading', 'Published']
