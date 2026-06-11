@@ -90,6 +90,21 @@ export interface Goal {
   createdAt: string
 }
 
+export interface OSWin {
+  appId: string
+  minimized: boolean
+  maximized: boolean
+  x: number
+  y: number
+  w: number
+  h: number
+  z: number
+  px?: number
+  py?: number
+  pw?: number
+  ph?: number
+}
+
 export interface EntertainmentItem {
   id: string
   title: string
@@ -232,6 +247,16 @@ interface AppStore {
   setCommandPaletteOpen: (v: boolean) => void
   language: 'fa' | 'en'
   setLanguage: (lang: 'fa' | 'en') => void
+
+  osWins: Record<string, OSWin>
+  zTop: number
+  openOSWin: (appId: string) => void
+  closeOSWin: (appId: string) => void
+  minimizeOSWin: (appId: string) => void
+  maximizeOSWin: (appId: string) => void
+  focusOSWin: (appId: string) => void
+  moveOSWin: (appId: string, x: number, y: number) => void
+  resizeOSWin: (appId: string, w: number, h: number) => void
 }
 
 export const useStore = create<AppStore>()(
@@ -291,7 +316,50 @@ export const useStore = create<AppStore>()(
       setCommandPaletteOpen: (v) => set({ commandPaletteOpen: v }),
       language: 'fa',
       setLanguage: (lang) => set({ language: lang }),
+
+      osWins: {},
+      zTop: 10,
+      openOSWin: (appId) => set((s) => {
+        const newZ = s.zTop + 1
+        const ex = s.osWins[appId]
+        if (ex) return { osWins: { ...s.osWins, [appId]: { ...ex, minimized: false, z: newZ } }, zTop: newZ }
+        const vw = typeof window !== 'undefined' ? window.innerWidth : 1440
+        const vh = typeof window !== 'undefined' ? window.innerHeight : 900
+        const w = Math.min(1020, Math.max(680, vw * 0.72))
+        const h = Math.min(780, Math.max(480, (vh - 120) * 0.88))
+        const cascade = (Object.keys(s.osWins).length % 5) * 24
+        const x = Math.round((vw - w) / 2 + cascade)
+        const y = Math.round(28 + ((vh - 120) - h) / 2 + cascade)
+        return { osWins: { ...s.osWins, [appId]: { appId, minimized: false, maximized: false, x, y, w, h, z: newZ } }, zTop: newZ }
+      }),
+      closeOSWin: (appId) => set((s) => {
+        const next = { ...s.osWins }
+        delete next[appId]
+        return { osWins: next }
+      }),
+      minimizeOSWin: (appId) => set((s) => ({
+        osWins: { ...s.osWins, [appId]: { ...s.osWins[appId], minimized: true } }
+      })),
+      maximizeOSWin: (appId) => set((s) => {
+        const w = s.osWins[appId]
+        if (!w) return {}
+        if (w.maximized) return { osWins: { ...s.osWins, [appId]: { ...w, maximized: false, x: w.px ?? w.x, y: w.py ?? w.y, w: w.pw ?? w.w, h: w.ph ?? w.h } } }
+        return { osWins: { ...s.osWins, [appId]: { ...w, maximized: true, px: w.x, py: w.y, pw: w.w, ph: w.h } } }
+      }),
+      focusOSWin: (appId) => set((s) => {
+        const newZ = s.zTop + 1
+        return { osWins: { ...s.osWins, [appId]: { ...s.osWins[appId], z: newZ } }, zTop: newZ }
+      }),
+      moveOSWin: (appId, x, y) => set((s) => ({ osWins: { ...s.osWins, [appId]: { ...s.osWins[appId], x, y } } })),
+      resizeOSWin: (appId, w, h) => set((s) => ({ osWins: { ...s.osWins, [appId]: { ...s.osWins[appId], w, h } } })),
     }),
-    { name: 'mojtaba-os-v5' }
+    {
+      name: 'mojtaba-os-v5',
+      partialize: (s) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { osWins, zTop, openOSWin, closeOSWin, minimizeOSWin, maximizeOSWin, focusOSWin, moveOSWin, resizeOSWin, ...rest } = s
+        return rest
+      }
+    }
   )
 )

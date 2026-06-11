@@ -3,7 +3,7 @@ import { useState, useTransition, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 
-const WALLPAPER: React.CSSProperties = {
+const WALLPAPER = {
   background: `
     radial-gradient(ellipse 90% 70% at 5% 50%, rgba(76,29,149,0.7) 0%, transparent 55%),
     radial-gradient(ellipse 70% 60% at 85% 75%, rgba(17,24,83,0.65) 0%, transparent 60%),
@@ -107,7 +107,7 @@ export default function LoginPage() {
             }}
           >
             <img
-              src="/profile.png"
+              src="/profile/profile.png"
               alt="مجتبا"
               className="w-full h-full object-cover"
               onError={(e) => {
