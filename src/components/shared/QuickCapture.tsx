@@ -68,7 +68,7 @@ export function QuickCapture() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={open}
-        className="fixed bottom-6 start-6 w-12 h-12 bg-ink-200 text-cream-200 rounded-full shadow-modal flex items-center justify-center z-40 hover:bg-ink-300 transition-colors"
+        className="fixed bottom-[110px] start-6 w-12 h-12 bg-ink-200 text-cream-200 rounded-full shadow-modal flex items-center justify-center z-40 hover:bg-ink-300 transition-colors"
       >
         <Plus size={20} />
       </motion.button>
@@ -89,7 +89,7 @@ export function QuickCapture() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 8 }}
               transition={{ duration: 0.18 }}
-              className="fixed bottom-24 start-6 w-[360px] bg-white border border-[#E4DDD3] rounded-2xl shadow-modal z-50 overflow-hidden"
+              className="fixed bottom-[160px] start-6 w-[360px] bg-white border border-[#E4DDD3] rounded-2xl shadow-modal z-50 overflow-hidden"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-[#F0EAE2]">

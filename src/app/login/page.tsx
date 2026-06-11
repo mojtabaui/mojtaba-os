@@ -1,22 +1,44 @@
 'use client'
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, LogIn } from 'lucide-react'
+
+const WALLPAPER: React.CSSProperties = {
+  background: `
+    radial-gradient(ellipse 90% 70% at 5% 50%, rgba(76,29,149,0.7) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 85% 75%, rgba(17,24,83,0.65) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 45% 15%, rgba(109,40,217,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 30% 80%, rgba(30,58,138,0.4) 0%, transparent 55%),
+    linear-gradient(145deg, #0c0818 0%, #080614 45%, #050410 100%)
+  `,
+}
 
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [showPw, setShowPw] = useState(false)
-  const [error, setError] = useState('')
+  const [step, setStep] = useState<'user' | 'pass'>('user')
+  const [shaking, setShaking] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [clock, setClock] = useState('')
+  const [dateLabel, setDateLabel] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const update = () => {
+      const now = new Date()
+      const h = String(now.getHours()).padStart(2, '0')
+      const m = String(now.getMinutes()).padStart(2, '0')
+      setClock(`${h}:${m}`)
+      setDateLabel(now.toLocaleDateString('fa-IR', { weekday: 'long', month: 'long', day: 'numeric' }))
+    }
+    update()
+    const id = setInterval(update, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-
     startTransition(async () => {
       try {
         const res = await fetch('/api/auth/login', {
@@ -24,136 +46,161 @@ export default function LoginPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
         })
-
         if (res.ok) {
-          const from = searchParams.get('from') || '/dashboard'
-          router.push(from)
+          router.push(searchParams.get('from') || '/dashboard')
           router.refresh()
         } else {
-          setError('Invalid username or password')
+          setShaking(true)
+          setPassword('')
+          setTimeout(() => setShaking(false), 600)
         }
       } catch {
-        setError('Something went wrong. Try again.')
+        setShaking(true)
+        setTimeout(() => setShaking(false), 600)
       }
     })
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left — Black panel */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4 }}
-        className="hidden lg:flex w-[420px] flex-shrink-0 bg-[#0A0A0A] flex-col justify-between p-10"
-      >
-        <div>
-          <p className="text-[11px] text-[#3A3A3A] uppercase tracking-[0.15em] font-medium mb-12">Mojtaba OS</p>
-          <h1 className="text-3xl font-semibold text-cream-200 leading-tight">Your personal<br />operating system.</h1>
-          <p className="text-[13px] text-[#5A5550] mt-4 leading-relaxed">
-            Manage migration, IELTS, Balinex,<br />
-            Academy, Content — all in one place.
-          </p>
-        </div>
+    <div className="fixed inset-0 overflow-hidden flex flex-col">
+      {/* Wallpaper */}
+      <div className="absolute inset-0" style={WALLPAPER} />
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
+      />
 
-        <div className="space-y-4">
-          {[
-            { label: 'P1', name: 'Migration', color: '#EF4444' },
-            { label: 'P2', name: 'IELTS', color: '#F97316' },
-            { label: 'P3', name: 'Balinex', color: '#3B82F6' },
-            { label: 'P4', name: 'Academy', color: '#22C55E' },
-            { label: 'P5', name: 'Content', color: '#A855F7' },
-          ].map(p => (
-            <div key={p.label} className="flex items-center gap-3">
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: p.color + '25', color: p.color }}>{p.label}</span>
-              <span className="text-[12px] text-[#5A5550]">{p.name}</span>
-            </div>
-          ))}
-        </div>
+      {/* Time — top center */}
+      <div className="relative z-10 text-center pt-16 pointer-events-none">
+        <motion.p
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="text-white/40 text-sm font-light tracking-[0.2em] uppercase"
+        >
+          {dateLabel}
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.05 }}
+          className="text-white font-thin leading-none mt-2"
+          style={{ fontSize: 'clamp(5rem, 14vw, 9rem)', letterSpacing: '-0.02em' }}
+        >
+          {clock}
+        </motion.p>
+      </div>
 
-        <p className="text-[10px] text-[#2A2A2A]">© 2026 Mojtaba Yazdanpanah</p>
-      </motion.div>
+      {/* Login card — center */}
+      <div className="relative z-10 flex-1 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.25, type: 'spring', damping: 18, stiffness: 150 }}
+          className="flex flex-col items-center gap-5"
+        >
+          {/* Profile photo */}
+          <div
+            className="w-[104px] h-[104px] rounded-full overflow-hidden"
+            style={{
+              boxShadow: '0 0 0 3px rgba(255,255,255,0.15), 0 0 50px rgba(139,92,246,0.5), 0 8px 32px rgba(0,0,0,0.6)',
+            }}
+          >
+            <img
+              src="/profile.jpg"
+              alt="مجتبا"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const t = e.target as HTMLImageElement
+                t.style.display = 'none'
+                if (t.parentElement) {
+                  t.parentElement.style.background = 'linear-gradient(145deg,#7c3aed,#2563eb)'
+                  t.parentElement.innerHTML = '<span style="color:white;font-size:2.5rem;display:flex;align-items:center;justify-content:center;height:100%">م</span>'
+                }
+              }}
+            />
+          </div>
 
-      {/* Right — Cream panel */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        className="flex-1 bg-cream-200 flex items-center justify-center p-8"
-      >
-        <div className="w-full max-w-[340px]">
-          {/* Mobile logo */}
-          <p className="text-[11px] text-[#A09388] uppercase tracking-[0.15em] font-medium mb-8 lg:hidden">Mojtaba OS</p>
+          {/* Name */}
+          <div className="text-center">
+            <h2 className="text-white text-xl font-semibold" style={{ letterSpacing: '0.02em' }}>مجتبا</h2>
+            <p className="text-white/35 text-xs mt-1 tracking-widest">SENIOR UI/UX DESIGNER</p>
+          </div>
 
-          <h2 className="text-2xl font-semibold text-ink-200 mb-1">Welcome back</h2>
-          <p className="text-[13px] text-[#A09388] mb-8">Sign in to your workspace</p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-[11px] font-medium text-[#6B6259] block mb-1.5">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                placeholder="Your username"
-                autoComplete="username"
-                autoFocus
-                className="w-full text-[13px] bg-white border border-[#E4DDD3] rounded-xl px-4 py-3 focus:outline-none focus:border-ink-200 focus:ring-2 focus:ring-ink-200/10 transition-all text-ink-200 placeholder:text-[#C4B9AD]"
-              />
-            </div>
-
-            <div>
-              <label className="text-[11px] font-medium text-[#6B6259] block mb-1.5">Password</label>
-              <div className="relative">
+          {/* Form */}
+          <form onSubmit={handleLogin} className="flex flex-col items-center gap-3 w-64">
+            {step === 'user' ? (
+              <motion.div key="user-step" className="w-full flex flex-col gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <input
-                  type={showPw ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="Your password"
-                  autoComplete="current-password"
-                  className="w-full text-[13px] bg-white border border-[#E4DDD3] rounded-xl px-4 py-3 pr-11 focus:outline-none focus:border-ink-200 focus:ring-2 focus:ring-ink-200/10 transition-all text-ink-200 placeholder:text-[#C4B9AD]"
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && username) setStep('pass') }}
+                  placeholder="نام کاربری"
+                  autoFocus
+                  className="w-full text-center text-[14px] text-white rounded-2xl px-4 py-3 focus:outline-none placeholder:text-white/25 transition-all"
+                  style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(16px)' }}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#C4B9AD] hover:text-[#6B6259] transition-colors"
+                  onClick={() => username && setStep('pass')}
+                  className="w-full py-2.5 text-white text-[13px] font-medium rounded-2xl transition-all hover:brightness-110"
+                  style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(16px)' }}
                 >
-                  {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+                  ادامه →
                 </button>
-              </div>
-            </div>
-
-            {error && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-[12px] text-[#EF4444] bg-[#FEF2F2] border border-[#FECACA] rounded-xl px-3 py-2"
+              </motion.div>
+            ) : (
+              <motion.div
+                key="pass-step"
+                className="w-full flex flex-col gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: shaking ? [0, -10, 10, -8, 8, -4, 4, 0] : 0 }}
+                transition={{ duration: shaking ? 0.5 : 0.2 }}
               >
-                {error}
-              </motion.p>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="رمز عبور"
+                  autoFocus
+                  className="w-full text-center text-[14px] text-white rounded-2xl px-4 py-3 focus:outline-none placeholder:text-white/25 transition-all"
+                  style={{
+                    background: shaking ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.1)',
+                    border: `1px solid ${shaking ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.18)'}`,
+                    backdropFilter: 'blur(16px)',
+                  }}
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep('user')}
+                    className="flex-1 py-2.5 text-white/50 text-[12px] rounded-2xl transition-all hover:text-white/70"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  >
+                    بازگشت
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isPending || !password}
+                    className="flex-1 py-2.5 text-white text-[13px] font-semibold rounded-2xl transition-all hover:brightness-110 disabled:opacity-40 flex items-center justify-center"
+                    style={{ background: 'rgba(139,92,246,0.6)', border: '1px solid rgba(139,92,246,0.5)', backdropFilter: 'blur(16px)' }}
+                  >
+                    {isPending
+                      ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      : 'ورود'}
+                  </button>
+                </div>
+              </motion.div>
             )}
-
-            <button
-              type="submit"
-              disabled={isPending || !username || !password}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-ink-200 text-cream-200 rounded-xl text-[13px] font-medium hover:bg-ink-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              {isPending ? (
-                <div className="w-4 h-4 border-2 border-cream-400 border-t-cream-200 rounded-full animate-spin" />
-              ) : (
-                <>
-                  <LogIn size={14} />
-                  Sign in
-                </>
-              )}
-            </button>
           </form>
+        </motion.div>
+      </div>
 
-          <p className="text-[11px] text-[#C4B9AD] text-center mt-8">
-            Private workspace · Not for public access
-          </p>
-        </div>
-      </motion.div>
+      {/* Bottom hint */}
+      <p className="relative z-10 text-center text-white/15 text-[10px] tracking-[0.3em] pb-8">
+        MOJTABA OS · PERSONAL WORKSPACE
+      </p>
     </div>
   )
 }
