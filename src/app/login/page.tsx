@@ -107,7 +107,7 @@ export default function LoginPage() {
             }}
           >
             <img
-              src="/profile.jpg"
+              src="/profile.png"
               alt="مجتبا"
               className="w-full h-full object-cover"
               onError={(e) => {
