@@ -66,7 +66,7 @@ export default function BudgetPage() {
           </div>
         </div>
 
-        <div className="p-6 max-w-3xl">
+        <div className="p-6 max-w-3xl xl:max-w-[1200px] 2xl:max-w-[1800px] 3xl:max-w-[2400px]">
           {/* Overview card */}
           <div className="bg-[#0A0A0A] rounded-2xl p-6 mb-5">
             <div className="flex items-end justify-between mb-4">

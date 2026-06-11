@@ -94,7 +94,7 @@ export default function WeeklyPage() {
           </div>
         </div>
 
-        <div className="p-6 max-w-[1100px]">
+        <div className="p-6 max-w-[1100px] xl:max-w-[1600px] 2xl:max-w-[2000px] 3xl:max-w-[2800px]">
           {/* Week Stats */}
           <div className="grid grid-cols-4 gap-3 mb-5">
             <div className="bg-[#0A0A0A] rounded-2xl p-4">

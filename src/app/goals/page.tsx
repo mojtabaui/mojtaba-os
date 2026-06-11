@@ -169,7 +169,7 @@ export default function GoalsPage() {
           </div>
         </div>
 
-        <div className="p-6 max-w-4xl">
+        <div className="p-6 max-w-4xl xl:max-w-[1400px] 2xl:max-w-[1800px] 3xl:max-w-[2400px]">
           {/* Overall progress */}
           <div className="bg-[#0A0A0A] rounded-2xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">

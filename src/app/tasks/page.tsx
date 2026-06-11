@@ -279,7 +279,7 @@ export default function TasksPage() {
 
         {/* List */}
         {view === 'list' && (
-          <div className="p-6 max-w-3xl">
+          <div className="p-6 max-w-3xl xl:max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[2200px]">
             <div className="space-y-1.5">
               <AnimatePresence>
                 {filtered.map(task => {

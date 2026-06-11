@@ -188,7 +188,7 @@ export default function IELTSPage() {
           </div>
         </div>
 
-        <div className="p-6 max-w-[900px]">
+        <div className="p-6 max-w-[900px] xl:max-w-[1400px] 2xl:max-w-[1800px] 3xl:max-w-[2400px]">
           {/* Top stats */}
           <div className="grid grid-cols-4 gap-3 mb-6">
             <div className="bg-[#0A0A0A] rounded-2xl p-4">

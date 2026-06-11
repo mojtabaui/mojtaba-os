@@ -87,7 +87,7 @@ export default function DashboardPage() {
       variants={stagger.container}
       initial="hidden"
       animate="show"
-      className="min-h-full max-w-[1200px] mx-auto"
+      className="min-h-full max-w-[1200px] xl:max-w-[1600px] 2xl:max-w-[2000px] 3xl:max-w-[2800px] mx-auto"
     >
     <BurnoutAlert />
     <div className="p-6">
@@ -193,7 +193,7 @@ export default function DashboardPage() {
         <motion.div variants={stagger.item} className="col-span-7 grid grid-cols-3 gap-3">
           <StatCard label={isRtl ? 'تکمیل' : 'Completion'} value={`${completionRate}%`} sub={isRtl ? `${doneTasks}/${totalTasks} انجام‌شده` : `${doneTasks}/${totalTasks} tasks done`} />
           <StatCard label={isRtl ? 'استریک آیلتس' : 'IELTS Streak'} value={`${streak}d`} sub={isRtl ? 'روز متوالی' : 'consecutive days'} color="#F97316" />
-          <StatCard label={isRtl ? 'مهاجرت' : 'Migration'} value={`${applied}/${migrations.length}`} sub={isRtl ? 'دانشگاه درخواست شده' : 'universities applied'} color="#EF4444" />
+          <StatCard label={isRtl ? 'تحصیل' : 'Study Abroad'} value={`${applied}/${migrations.length}`} sub={isRtl ? 'دانشگاه درخواست شده' : 'universities applied'} color="#EF4444" />
           <StatCard label={isRtl ? 'رویداد امروز' : "Today's Events"} value={todayEvents.length} sub={isRtl ? 'برنامه‌ریزی شده' : 'scheduled'} />
           <StatCard label={isRtl ? 'دانشجویان' : 'Students'} value={pendingStudents} sub={isRtl ? 'منتظر پاسخ' : 'need response'} color="#22C55E" />
           <StatCard label={isRtl ? 'وظایف فعال' : 'Active Tasks'} value={tasks.filter(t => t.status === 'in-progress').length} sub={isRtl ? 'در جریان' : 'in progress'} />

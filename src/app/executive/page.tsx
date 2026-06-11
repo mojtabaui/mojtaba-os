@@ -122,7 +122,7 @@ export default function ExecutivePage() {
           </div>
         </div>
 
-        <motion.div variants={stagger.container} initial="hidden" animate="show" className="p-6 max-w-[1100px]">
+        <motion.div variants={stagger.container} initial="hidden" animate="show" className="p-6 max-w-[1100px] xl:max-w-[1600px] 2xl:max-w-[2000px] 3xl:max-w-[2800px]">
 
           {/* Life Score Banner */}
           <motion.div variants={stagger.item} className="bg-[#0A0A0A] rounded-2xl p-6 mb-5">

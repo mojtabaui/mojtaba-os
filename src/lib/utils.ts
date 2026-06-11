@@ -66,8 +66,8 @@ export function isSameDay(a: Date, b: Date): boolean {
 }
 
 export const PRIORITY_CONFIG = {
-  p1: { label: 'Migration', color: '#EF4444', bg: '#FEF2F2', text: '#DC2626', short: 'P1' },
-  p2: { label: 'IELTS', color: '#F97316', bg: '#FFF7ED', text: '#EA580C', short: 'P2' },
+  p1: { label: 'تحصیل', color: '#EF4444', bg: '#FEF2F2', text: '#DC2626', short: 'P1' },
+  p2: { label: 'زبان', color: '#F97316', bg: '#FFF7ED', text: '#EA580C', short: 'P2' },
   p3: { label: 'Balinex', color: '#3B82F6', bg: '#EFF6FF', text: '#2563EB', short: 'P3' },
   p4: { label: 'Academy', color: '#22C55E', bg: '#F0FDF4', text: '#16A34A', short: 'P4' },
   p5: { label: 'Content', color: '#A855F7', bg: '#FAF5FF', text: '#9333EA', short: 'P5' },

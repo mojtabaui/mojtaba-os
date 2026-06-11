@@ -45,6 +45,9 @@ const config: Config = {
         'card-hover': '0 4px 12px rgba(26,20,16,0.10), 0 2px 4px rgba(26,20,16,0.06)',
         modal: '0 20px 60px rgba(26,20,16,0.15)',
       },
+      screens: {
+        '3xl': '2560px',
+      },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',

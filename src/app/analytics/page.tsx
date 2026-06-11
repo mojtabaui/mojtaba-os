@@ -53,7 +53,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="p-6 max-w-[1100px]">
+        <div className="p-6 max-w-[1100px] xl:max-w-[1600px] 2xl:max-w-[2000px] 3xl:max-w-[2800px]">
           <div className="grid grid-cols-2 gap-4 mb-4">
             {/* Priority distribution */}
             <div className="bg-white border border-[#E8E2D8] rounded-2xl p-5">
