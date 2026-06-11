@@ -1,5 +1,4 @@
 'use client'
-import { usePathname } from 'next/navigation'
 import { useStore } from '@/lib/store'
 import { useT } from '@/lib/i18n'
 import { getTodayBoth, getLocalToday } from '@/lib/jalali'
@@ -7,7 +6,6 @@ import { Search, Plus, Menu } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
-  const pathname = usePathname()
   const { setCommandPaletteOpen, setQuickCaptureOpen, tasks, language } = useStore()
   const t = useT()
   const { jalaliShort, gregorian } = getTodayBoth()

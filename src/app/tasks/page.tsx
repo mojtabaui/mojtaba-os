@@ -14,10 +14,9 @@ const STATUSES: TaskStatus[] = ['backlog', 'planned', 'in-progress', 'review', '
 const PRIORITIES: Priority[] = ['p1', 'p2', 'p3', 'p4', 'p5']
 
 function TaskCard({ task, onMove, onDelete, onOpen }: { task: Task; onMove: (s: TaskStatus) => void; onDelete: () => void; onOpen: () => void }) {
-  const [expanded, setExpanded] = useState(false)
+  const expanded = false
   const { updateTask } = useStore()
   const cfg = PRIORITY_CONFIG[task.priority]
-  const stCfg = STATUS_CONFIG[task.status]
   const doneCount = task.subtasks.filter(s => s.done).length
 
   return (

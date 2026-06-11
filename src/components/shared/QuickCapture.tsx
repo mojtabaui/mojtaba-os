@@ -8,10 +8,9 @@ import { PRIORITY_CONFIG } from '@/lib/utils'
 import type { Priority } from '@/lib/utils'
 
 export function QuickCapture() {
-  const { quickCaptureOpen, setQuickCaptureOpen, addTask, language } = useStore()
+  const { quickCaptureOpen, setQuickCaptureOpen, addTask } = useStore()
   const t = useT()
-  const dir = useDir()
-  const isRtl = dir === 'rtl'
+  useDir()
 
   const TYPES = [
     { key: 'task', label: t.capture.task },

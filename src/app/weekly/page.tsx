@@ -1,14 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate, toLocalDateStr } from '@/lib/utils'
+import { PRIORITY_CONFIG, STATUS_CONFIG, toLocalDateStr } from '@/lib/utils'
 import type { Priority } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
 import { CalendarDays, CheckCircle2, Circle, ChevronLeft, ChevronRight, Flame, AlertCircle } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
-const WEEKDAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const WEEKDAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 function getWeekRange(offset = 0) {
@@ -129,7 +127,6 @@ export default function WeeklyPage() {
                   const dayTasks = tasks.filter(task => task.dueDate === dateStr)
                   const isToday = dateStr === today
                   const isPast = dateStr < today
-                  const hasMigration = dayTasks.some(task => task.priority === 'p1')
                   const hasIELTS = ieltsSessions.some(s => s.date === dateStr)
 
                   return (

@@ -102,9 +102,6 @@ export interface EntertainmentItem {
 
 // ─── Initial Data ─────────────────────────────────────────────────────────────
 
-const today = new Date().toISOString().split('T')[0]
-const addDays = (d: number) => new Date(Date.now() + d * 86400000).toISOString().split('T')[0]
-
 const INITIAL_TASKS: Task[] = []
 
 const INITIAL_MIGRATIONS: MigrationApp[] = []

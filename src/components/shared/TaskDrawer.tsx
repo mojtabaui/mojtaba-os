@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import { useT, useDir } from '@/lib/i18n'
 import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate, formatTime } from '@/lib/utils'
@@ -29,7 +29,6 @@ export function TaskDrawer({ taskId, onClose }: TaskDrawerProps) {
 
   if (!task) return null
 
-  const cfg = PRIORITY_CONFIG[form.priority || task.priority]
   const stCfg = STATUS_CONFIG[form.status || task.status]
 
   const save = (updates: Partial<Task>) => {

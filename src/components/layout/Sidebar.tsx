@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, Calendar, CheckSquare, Target, Plane,
   BookOpen, Briefcase, GraduationCap, Rss, User, BarChart2,
-  Settings, ChevronLeft, ChevronRight, Search, LogOut,
+  Settings, ChevronLeft, Search, LogOut,
   CalendarDays, Clock, Grid3x3, Trophy
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
