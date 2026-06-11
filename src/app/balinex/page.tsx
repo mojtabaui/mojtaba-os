@@ -14,15 +14,15 @@ export default function BalinexPage() {
   const { tasks, events, moveTask } = useStore()
   const [activeTab, setActiveTab] = useState('tasks')
   const [filterCat, setFilterCat] = useState('All')
-  const today = new Date().toISOString().split('T')[0]
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
 
-  const balinexTasks = tasks.filter(t => t.category === 'balinex' || t.priority === 'p3')
-  const filtered = filterCat === 'All' ? balinexTasks : balinexTasks.filter(t => t.tags.some(tag => tag.toLowerCase() === filterCat.toLowerCase()))
+  const balinexTasks = tasks.filter(task => task.category === 'balinex' || task.priority === 'p3')
+  const filtered = filterCat === 'All' ? balinexTasks : balinexTasks.filter(task => task.tags.some(tag => tag.toLowerCase() === filterCat.toLowerCase()))
   const todayEvents = events.filter(e => e.category === 'balinex' && e.date === today)
   const upcomingEvents = events.filter(e => e.category === 'balinex' && e.date >= today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 5)
 
-  const done = balinexTasks.filter(t => t.status === 'done').length
-  const inProgress = balinexTasks.filter(t => t.status === 'in-progress').length
+  const done = balinexTasks.filter(task => task.status === 'done').length
+  const inProgress = balinexTasks.filter(task => task.status === 'in-progress').length
   const total = balinexTasks.length
 
   return (
@@ -183,7 +183,7 @@ export default function BalinexPage() {
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-4">
                 <h3 className="text-[12px] font-semibold text-ink-200 mb-3">Status Breakdown</h3>
                 {['backlog', 'planned', 'in-progress', 'review', 'done'].map(s => {
-                  const count = balinexTasks.filter(t => t.status === s).length
+                  const count = balinexTasks.filter(task => task.status === s).length
                   const stCfg = STATUS_CONFIG[s as keyof typeof STATUS_CONFIG]
                   return (
                     <div key={s} className="flex items-center justify-between py-1">

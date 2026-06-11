@@ -92,7 +92,7 @@ function AddContentModal({ onClose, pipeline, t }: { onClose: () => void; pipeli
 
   const submit = () => {
     if (!form.title) return
-    addContent({ ...form, tags: form.tags ? form.tags.split(',').map(t => t.trim()) : [] })
+    addContent({ ...form, tags: form.tags ? form.tags.split(',').map(tag => tag.trim()) : [] })
     onClose()
   }
 
@@ -114,7 +114,7 @@ function AddContentModal({ onClose, pipeline, t }: { onClose: () => void; pipeli
               <label className="text-[11px] font-medium text-[#6B6259] block mb-1">Type</label>
               <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value as ContentType })}
                 className="w-full text-[13px] bg-cream-50 border border-[#E8E2D8] rounded-xl px-3 py-2 focus:outline-none focus:border-ink-200 text-ink-200">
-                {Object.keys(TYPE_ICONS).map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+                {Object.keys(TYPE_ICONS).map(typeKey => <option key={typeKey} value={typeKey}>{typeKey.charAt(0).toUpperCase() + typeKey.slice(1)}</option>)}
               </select>
             </div>
             <div>

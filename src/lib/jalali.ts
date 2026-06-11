@@ -70,3 +70,14 @@ export function getTodayBoth(): { gregorian: string; jalali: string; jalaliShort
   const jalaliShort = `${j.day} ${j.monthNameFa} ${j.year}`
   return { gregorian, jalali, jalaliShort }
 }
+
+// Returns today's date as YYYY-MM-DD using LOCAL time (not UTC)
+// Critical for Iran (UTC+3:30): toISOString() gives UTC date which differs
+// from local date during the first 3.5 hours of each day
+export function getLocalToday(): string {
+  const d = new Date()
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}

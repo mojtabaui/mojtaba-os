@@ -12,13 +12,13 @@ export default function AnalyticsPage() {
 
   const priorityData = Object.entries(PRIORITY_CONFIG).map(([key, cfg]) => ({
     name: cfg.label,
-    value: tasks.filter(t => t.priority === key).length,
+    value: tasks.filter(task => task.priority === key).length,
     color: cfg.color,
   }))
 
   const statusData = Object.entries(STATUS_CONFIG).map(([key, cfg]) => ({
     name: cfg.label,
-    value: tasks.filter(t => t.status === key).length,
+    value: tasks.filter(task => task.status === key).length,
     color: cfg.color,
   }))
 
@@ -33,10 +33,10 @@ export default function AnalyticsPage() {
   const last7 = Array.from({ length: 7 }, (_, i) => {
     const d = new Date()
     d.setDate(d.getDate() - (6 - i))
-    const dateStr = d.toISOString().split('T')[0]
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
     return {
       day: d.toLocaleDateString('en-US', { weekday: 'short' }),
-      tasks: tasks.filter(t => t.createdAt.startsWith(dateStr)).length,
+      tasks: tasks.filter(task => task.createdAt.startsWith(dateStr)).length,
     }
   })
 

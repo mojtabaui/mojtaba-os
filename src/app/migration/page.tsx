@@ -19,7 +19,7 @@ function AppCard({ app, onUpdate, onDelete, stages }: {
   stages: Stage[]
 }) {
   const stage = stages.find(s => s.status === app.status)!
-  const isOverdue = app.deadline < new Date().toISOString().split('T')[0]
+  const _now = new Date(); const isOverdue = app.deadline < `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`
 
   return (
     <motion.div

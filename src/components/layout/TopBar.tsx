@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation'
 import { useStore } from '@/lib/store'
 import { useT } from '@/lib/i18n'
-import { getTodayBoth } from '@/lib/jalali'
+import { getTodayBoth, getLocalToday } from '@/lib/jalali'
 import { Search, Plus, Menu } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -11,7 +11,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const { setCommandPaletteOpen, setQuickCaptureOpen, tasks, language } = useStore()
   const t = useT()
   const { jalaliShort, gregorian } = getTodayBoth()
-  const today = new Date().toISOString().split('T')[0]
+  const today = getLocalToday()
   const isRtl = language === 'fa'
 
   const todayCount = tasks.filter(t => t.dueDate === today && t.status !== 'done' && t.status !== 'cancelled').length

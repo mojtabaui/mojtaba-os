@@ -26,13 +26,13 @@ export default function BudgetPage() {
   const today = new Date()
   const weekStart = new Date(today)
   weekStart.setDate(today.getDate() - today.getDay())
-  const weekStartStr = weekStart.toISOString().split('T')[0]
+  const weekStartStr = `${weekStart.getFullYear()}-${String(weekStart.getMonth()+1).padStart(2,'0')}-${String(weekStart.getDate()).padStart(2,'0')}`
 
   // Calculate spent hours per priority (from estimated time of tasks due this week)
   const spent: Record<Priority, number> = { p1: 0, p2: 0, p3: 0, p4: 0, p5: 0 }
-  tasks.filter(t => t.dueDate && t.dueDate >= weekStartStr && t.status !== 'cancelled').forEach(t => {
-    if (t.estimatedTime) {
-      spent[t.priority] = (spent[t.priority] || 0) + t.estimatedTime / 60
+  tasks.filter(task => task.dueDate && task.dueDate >= weekStartStr && task.status !== 'cancelled').forEach(task => {
+    if (task.estimatedTime) {
+      spent[task.priority] = (spent[task.priority] || 0) + task.estimatedTime / 60
     }
   })
   // Add IELTS actual hours

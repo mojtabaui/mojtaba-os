@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import { useT } from '@/lib/i18n'
-import { formatTime, getDaysInMonth, getFirstDayOfMonth, isToday } from '@/lib/utils'
+import { formatTime, getDaysInMonth, getFirstDayOfMonth, isToday, toLocalDateStr } from '@/lib/utils'
 import { gregorianToJalali, formatJalali } from '@/lib/jalali'
 import { AppShell } from '@/components/layout/AppShell'
 import type { CalendarEvent } from '@/lib/store'
@@ -37,7 +37,7 @@ function AddEventModal({ defaultDate, onClose }: { defaultDate?: string; onClose
   const { addEvent } = useStore()
   const t = useT()
   const [form, setForm] = useState({
-    title: '', date: defaultDate || new Date().toISOString().split('T')[0],
+    title: '', date: defaultDate || toLocalDateStr(new Date()),
     time: '', duration: 60, category: 'balinex', description: '', color: '#3B82F6'
   })
 
@@ -123,8 +123,7 @@ export default function CalendarPage() {
   const goToday = () => setCurrentDate(new Date())
 
   const getEventsForDate = (d: Date) => {
-    const dateStr = d.toISOString().split('T')[0]
-    return events.filter(e => e.date === dateStr)
+    return events.filter(e => e.date === toLocalDateStr(d))
   }
 
   const getJalaliLabel = (d: Date) => {
@@ -206,7 +205,7 @@ export default function CalendarPage() {
               {cells.map((date, i) => {
                 if (!date) return <div key={`empty-${i}`} className="bg-cream-50 min-h-[100px]" />
                 const dayEvents = getEventsForDate(date)
-                const dateStr = date.toISOString().split('T')[0]
+                const dateStr = toLocalDateStr(date)
                 const isT = isToday(date)
                 const isSelected = selectedDate === dateStr
                 const jDay = showJalali ? getJalaliLabel(date) : null
@@ -259,7 +258,7 @@ export default function CalendarPage() {
                         </div>
                       ))}
                       {dayEvents.length === 0 && (
-                        <button onClick={() => { setSelectedDate(d.toISOString().split('T')[0]); setShowAdd(true) }}
+                        <button onClick={() => { setSelectedDate(toLocalDateStr(d)); setShowAdd(true) }}
                           className="w-full text-[10px] text-[#D4C9B8] border border-dashed border-[#E4DDD3] rounded-lg py-3 hover:border-[#C4B9AD] hover:text-[#A09388] transition-all">
                           +
                         </button>

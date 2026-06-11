@@ -90,6 +90,16 @@ export interface Goal {
   createdAt: string
 }
 
+export interface EntertainmentItem {
+  id: string
+  title: string
+  type: 'game' | 'movie' | 'series'
+  status: 'completed' | 'in-progress' | 'wishlist'
+  rating?: number
+  platform?: string
+  notes?: string
+}
+
 // ─── Initial Data ─────────────────────────────────────────────────────────────
 
 const today = new Date().toISOString().split('T')[0]
@@ -170,6 +180,8 @@ const INITIAL_STUDENTS: Student[] = []
 
 const INITIAL_GOALS: Goal[] = []
 
+const INITIAL_ENTERTAINMENT: EntertainmentItem[] = []
+
 // ─── Store ────────────────────────────────────────────────────────────────────
 
 interface AppStore {
@@ -209,6 +221,11 @@ interface AppStore {
   addGoal: (g: Omit<Goal, 'id' | 'createdAt'>) => void
   updateGoal: (id: string, u: Partial<Goal>) => void
   deleteGoal: (id: string) => void
+
+  entertainment: EntertainmentItem[]
+  addEntertainment: (e: Omit<EntertainmentItem, 'id'>) => void
+  updateEntertainment: (id: string, u: Partial<EntertainmentItem>) => void
+  deleteEntertainment: (id: string) => void
 
   sidebarCollapsed: boolean
   toggleSidebar: () => void
@@ -263,6 +280,11 @@ export const useStore = create<AppStore>()(
       addGoal: (g) => set((s) => ({ goals: [{ ...g, id: genId(), createdAt: new Date().toISOString() }, ...s.goals] })),
       updateGoal: (id, u) => set((s) => ({ goals: s.goals.map((g) => g.id === id ? { ...g, ...u } : g) })),
       deleteGoal: (id) => set((s) => ({ goals: s.goals.filter((g) => g.id !== id) })),
+
+      entertainment: INITIAL_ENTERTAINMENT,
+      addEntertainment: (e) => set((s) => ({ entertainment: [{ ...e, id: genId() }, ...s.entertainment] })),
+      updateEntertainment: (id, u) => set((s) => ({ entertainment: s.entertainment.map((e) => e.id === id ? { ...e, ...u } : e) })),
+      deleteEntertainment: (id) => set((s) => ({ entertainment: s.entertainment.filter((e) => e.id !== id) })),
 
       sidebarCollapsed: false,
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),

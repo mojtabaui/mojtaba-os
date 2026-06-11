@@ -32,9 +32,10 @@ function StreakCalendar({ sessions }: { sessions: { date: string }[] }) {
   const days = Array.from({ length: 28 }, (_, i) => {
     const d = new Date(today)
     d.setDate(d.getDate() - (27 - i))
-    return d.toISOString().split('T')[0]
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
   })
   const studiedDays = new Set(sessions.map(s => s.date))
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`
 
   return (
     <div className="grid grid-cols-7 gap-1">
@@ -45,7 +46,7 @@ function StreakCalendar({ sessions }: { sessions: { date: string }[] }) {
         <div
           key={day}
           title={day}
-          className={`h-5 w-full rounded transition-all ${studiedDays.has(day) ? 'bg-[#F97316]' : day === today.toISOString().split('T')[0] ? 'bg-cream-300 ring-1 ring-[#F97316]' : 'bg-cream-200'}`}
+          className={`h-5 w-full rounded transition-all ${studiedDays.has(day) ? 'bg-[#F97316]' : day === todayStr ? 'bg-cream-300 ring-1 ring-[#F97316]' : 'bg-cream-200'}`}
         />
       ))}
     </div>
@@ -54,7 +55,7 @@ function StreakCalendar({ sessions }: { sessions: { date: string }[] }) {
 
 function AddSessionModal({ onClose, t, skills }: { onClose: () => void; t: ReturnType<typeof useT>; skills: { key: Skill; label: string; color: string; icon: React.ElementType }[] }) {
   const { addIELTSSession } = useStore()
-  const today = new Date().toISOString().split('T')[0]
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
   const [form, setForm] = useState({ date: today, skill: 'reading' as Skill, duration: 60, notes: '', score: '' })
 
   const submit = () => {
@@ -119,7 +120,7 @@ export default function IELTSPage() {
   const t = useT()
   const { ieltsSessions, ieltsTarget } = useStore()
   const [showAdd, setShowAdd] = useState(false)
-  const today = new Date().toISOString().split('T')[0]
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
 
   const SKILLS: { key: Skill; label: string; color: string; icon: React.ElementType }[] = [
     { key: 'reading', label: t.ielts.reading, color: '#3B82F6', icon: Eye },
@@ -137,7 +138,7 @@ export default function IELTSPage() {
   const visited = new Set<string>()
   for (const s of sorted) {
     if (!visited.has(s.date)) {
-      const cd = checkDate.toISOString().split('T')[0]
+      const cd = `${checkDate.getFullYear()}-${String(checkDate.getMonth()+1).padStart(2,'0')}-${String(checkDate.getDate()).padStart(2,'0')}`
       if (s.date === cd) { streak++; visited.add(s.date); checkDate.setDate(checkDate.getDate() - 1) }
       else break
     }
@@ -146,7 +147,7 @@ export default function IELTSPage() {
   // This week's hours
   const weekStart = new Date()
   weekStart.setDate(weekStart.getDate() - weekStart.getDay())
-  const weekSessions = ieltsSessions.filter(s => s.date >= weekStart.toISOString().split('T')[0])
+  const weekSessions = ieltsSessions.filter(s => s.date >= `${weekStart.getFullYear()}-${String(weekStart.getMonth()+1).padStart(2,'0')}-${String(weekStart.getDate()).padStart(2,'0')}`)
   const weekMinutes = weekSessions.reduce((acc, s) => acc + s.duration, 0)
 
   // Today's sessions

@@ -3,11 +3,11 @@ import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import { PRIORITY_CONFIG } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
-import { getTodayBoth } from '@/lib/jalali'
+import { getTodayBoth, getLocalToday } from '@/lib/jalali'
 import Link from 'next/link'
 import {
   Trophy, Plane, BookOpen, Briefcase, GraduationCap,
-  Rss, User, TrendingUp, TrendingDown, Minus, Star
+  Rss, TrendingUp, TrendingDown, Minus, Star
 } from 'lucide-react'
 import { useT } from '@/lib/i18n'
 
@@ -55,11 +55,10 @@ export default function ExecutivePage() {
   const t = useT()
   const { tasks, migrations, ieltsSessions, students, content, goals, events } = useStore()
   const { gregorian, jalaliShort } = getTodayBoth()
-  const today = new Date().toISOString().split('T')[0]
-  const thisMonth = today.slice(0, 7)
+  const today = getLocalToday()
 
   // Scores
-  const doneTasks = tasks.filter(t => t.status === 'done').length
+  const doneTasks = tasks.filter(task => task.status === 'done').length
   const totalTasks = tasks.length
   const productivityScore = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0
 
@@ -76,8 +75,8 @@ export default function ExecutivePage() {
   const publishedContent = content.filter(c => c.status === 'published').length
   const contentScore = Math.min(publishedContent * 5, 100)
 
-  const balinexDone = tasks.filter(t => t.priority === 'p3' && t.status === 'done').length
-  const balinexTotal = tasks.filter(t => t.priority === 'p3').length
+  const balinexDone = tasks.filter(task => task.priority === 'p3' && task.status === 'done').length
+  const balinexTotal = tasks.filter(task => task.priority === 'p3').length
   const balinexScore = balinexTotal > 0 ? Math.round((balinexDone / balinexTotal) * 100) : 0
 
   const avgGoalProgress = goals.length > 0
@@ -86,16 +85,21 @@ export default function ExecutivePage() {
 
   const lifeScore = Math.round((productivityScore + migrationScore + ieltsScore + academyScore + contentScore + balinexScore) / 6)
 
-  // Today's events
   const todayEvents = events.filter(e => e.date === today)
 
+  const scoreLabel =
+    lifeScore >= 80 ? t.executive.scoreExceptional :
+    lifeScore >= 60 ? t.executive.scoreOnTrack :
+    lifeScore >= 40 ? t.executive.scoreGrow :
+    t.executive.scoreFocus
+
   const scoreData = [
-    { score: migrationScore, color: '#EF4444', label: 'Migration' },
-    { score: ieltsScore, color: '#F97316', label: 'IELTS' },
-    { score: balinexScore, color: '#3B82F6', label: 'Balinex' },
-    { score: academyScore, color: '#22C55E', label: 'Academy' },
-    { score: contentScore, color: '#A855F7', label: 'Content' },
-    { score: productivityScore, color: '#6B6259', label: 'Tasks' },
+    { score: migrationScore,  color: '#EF4444', label: t.executive.migrationScore },
+    { score: ieltsScore,      color: '#F97316', label: t.executive.ieltsScore },
+    { score: balinexScore,    color: '#3B82F6', label: t.executive.balinexScore },
+    { score: academyScore,    color: '#22C55E', label: t.executive.academyScore },
+    { score: contentScore,    color: '#A855F7', label: t.executive.contentScore },
+    { score: productivityScore, color: '#6B6259', label: t.executive.tasksScore },
   ]
 
   return (
@@ -126,9 +130,7 @@ export default function ExecutivePage() {
               <div>
                 <p className="text-[11px] text-[#3A3A3A] uppercase tracking-wider mb-1">{t.executive.overallScore}</p>
                 <p className="text-5xl font-bold text-cream-200">{lifeScore}<span className="text-2xl text-[#5A5550]">/100</span></p>
-                <p className="text-[12px] text-[#5A5550] mt-1">
-                  {lifeScore >= 80 ? '🔥 Exceptional performance' : lifeScore >= 60 ? '✅ On track' : lifeScore >= 40 ? '⚡ Room to grow' : '🎯 Focus needed'}
-                </p>
+                <p className="text-[12px] text-[#5A5550] mt-1">{scoreLabel}</p>
               </div>
               <div className="flex gap-6">
                 {scoreData.map(s => <ScoreRing key={s.label} {...s} />)}
@@ -151,7 +153,7 @@ export default function ExecutivePage() {
             <motion.div variants={stagger.item} className="col-span-4">
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-5 h-full">
                 <h2 className="text-[12px] font-semibold text-ink-200 mb-4 flex items-center gap-1.5">
-                  <Star size={13} className="text-[#EAB308]" /> Goals Overview
+                  <Star size={13} className="text-[#EAB308]" /> {t.executive.goalsOverview}
                 </h2>
                 <div className="space-y-3">
                   {goals.map(g => {
@@ -169,46 +171,46 @@ export default function ExecutivePage() {
                       </div>
                     )
                   })}
-                  {goals.length === 0 && <p className="text-[12px] text-[#C4B9AD]">No goals set</p>}
+                  {goals.length === 0 && <p className="text-[12px] text-[#C4B9AD]">{t.executive.noGoals}</p>}
                 </div>
                 <div className="mt-4 pt-3 border-t border-[#F0EAE2]">
                   <div className="flex justify-between">
-                    <span className="text-[11px] text-[#A09388]">Average progress</span>
+                    <span className="text-[11px] text-[#A09388]">{t.executive.avgProgress}</span>
                     <span className="text-[12px] font-bold text-ink-200">{avgGoalProgress}%</span>
                   </div>
                 </div>
               </div>
             </motion.div>
 
-            {/* Workspace Performance */}
+            {/* Workspace Metrics */}
             <motion.div variants={stagger.item} className="col-span-4">
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-5 h-full">
                 <h2 className="text-[12px] font-semibold text-ink-200 mb-4 flex items-center gap-1.5">
-                  <TrendingUp size={13} /> Workspace Metrics
+                  <TrendingUp size={13} /> {t.executive.workspaceMetrics}
                 </h2>
-                <MetricRow label="Migration Applied" value={`${appliedMigrations}/${migrations.length}`} trend="up" color="#EF4444" />
-                <MetricRow label="IELTS Study (7d)" value={`${recentIELTS.length} sessions`} trend={recentIELTS.length >= 5 ? 'up' : 'down'} color="#F97316" />
-                <MetricRow label="Balinex Tasks" value={`${balinexDone}/${balinexTotal} done`} trend="flat" color="#3B82F6" />
-                <MetricRow label="Students Pending" value={`${pendingStudents} to answer`} trend={pendingStudents === 0 ? 'up' : 'down'} color="#22C55E" />
-                <MetricRow label="Content Published" value={`${publishedContent} pieces`} trend="up" color="#A855F7" />
-                <MetricRow label="Tasks Done" value={`${doneTasks}/${totalTasks}`} trend={productivityScore >= 50 ? 'up' : 'down'} />
+                <MetricRow label={`${t.executive.migrationScore} — ${t.executive.appsInProgress}`} value={`${appliedMigrations}/${migrations.length}`} trend="up" color="#EF4444" />
+                <MetricRow label={`${t.executive.ieltsScore} (۷ روز)`} value={`${recentIELTS.length} جلسه`} trend={recentIELTS.length >= 5 ? 'up' : 'down'} color="#F97316" />
+                <MetricRow label={`${t.executive.balinexScore} — ${t.executive.tasksScore}`} value={`${balinexDone}/${balinexTotal} ${t.executive.done}`} trend="flat" color="#3B82F6" />
+                <MetricRow label={`${t.executive.academyScore} — ${t.executive.pending}`} value={`${pendingStudents}`} trend={pendingStudents === 0 ? 'up' : 'down'} color="#22C55E" />
+                <MetricRow label={t.executive.contentScore} value={`${publishedContent}`} trend="up" color="#A855F7" />
+                <MetricRow label={t.executive.tasksScore} value={`${doneTasks}/${totalTasks}`} trend={productivityScore >= 50 ? 'up' : 'down'} />
               </div>
             </motion.div>
 
-            {/* Today's Plan */}
+            {/* Today's Schedule */}
             <motion.div variants={stagger.item} className="col-span-4">
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-5 h-full">
-                <h2 className="text-[12px] font-semibold text-ink-200 mb-4">Today's Schedule</h2>
-                <div className="space-y-2">
+                <h2 className="text-[12px] font-semibold text-ink-200 mb-4">{t.executive.todaySchedule}</h2>
+                <div className="space-y-2 overflow-y-auto max-h-52">
                   {todayEvents.length === 0 ? (
-                    <p className="text-[12px] text-[#C4B9AD] py-6 text-center">No events scheduled</p>
+                    <p className="text-[12px] text-[#C4B9AD] py-6 text-center">{t.executive.noSchedule}</p>
                   ) : (
-                    todayEvents.map(ev => (
+                    [...todayEvents].sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99')).map(ev => (
                       <div key={ev.id} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-cream-50 border border-[#F0EAE2]">
                         <div className="w-0.5 h-8 rounded-full" style={{ background: ev.color }} />
                         <div>
                           <p className="text-[12px] font-medium text-ink-200">{ev.title}</p>
-                          <p className="text-[10px] text-[#A09388]">{ev.time}</p>
+                          <p className="text-[10px] text-[#A09388]">{ev.time || '—'}</p>
                         </div>
                       </div>
                     ))
@@ -217,28 +219,28 @@ export default function ExecutivePage() {
                 <div className="mt-4 pt-3 border-t border-[#F0EAE2] grid grid-cols-2 gap-2">
                   <Link href="/tasks">
                     <div className="text-center p-2 bg-cream-50 rounded-xl hover:bg-cream-200 transition-colors cursor-pointer">
-                      <p className="text-lg font-bold text-ink-200">{tasks.filter(t => t.status === 'in-progress').length}</p>
-                      <p className="text-[9px] text-[#A09388]">In Progress</p>
+                      <p className="text-lg font-bold text-ink-200">{tasks.filter(task => task.status === 'in-progress').length}</p>
+                      <p className="text-[9px] text-[#A09388]">{t.executive.inProgress}</p>
                     </div>
                   </Link>
                   <Link href="/tasks">
                     <div className="text-center p-2 bg-cream-50 rounded-xl hover:bg-cream-200 transition-colors cursor-pointer">
                       <p className="text-lg font-bold text-[#22C55E]">{doneTasks}</p>
-                      <p className="text-[9px] text-[#A09388]">Completed</p>
+                      <p className="text-[9px] text-[#A09388]">{t.executive.completed}</p>
                     </div>
                   </Link>
                 </div>
               </div>
             </motion.div>
 
-            {/* Priority Breakdown — full width */}
+            {/* Priority Breakdown */}
             <motion.div variants={stagger.item} className="col-span-12">
               <div className="bg-white border border-[#E8E2D8] rounded-2xl p-5">
-                <h2 className="text-[12px] font-semibold text-ink-200 mb-4">Priority Breakdown</h2>
+                <h2 className="text-[12px] font-semibold text-ink-200 mb-4">{t.executive.priorityBreakdown}</h2>
                 <div className="grid grid-cols-5 gap-4">
                   {(Object.entries(PRIORITY_CONFIG) as [string, typeof PRIORITY_CONFIG[keyof typeof PRIORITY_CONFIG]][]).map(([key, cfg]) => {
-                    const pTasks = tasks.filter(t => t.priority === key)
-                    const pDone = pTasks.filter(t => t.status === 'done').length
+                    const pTasks = tasks.filter(task => task.priority === key)
+                    const pDone = pTasks.filter(task => task.status === 'done').length
                     const pct = pTasks.length > 0 ? Math.round((pDone / pTasks.length) * 100) : 0
                     const WorkspaceIcon = { p1: Plane, p2: BookOpen, p3: Briefcase, p4: GraduationCap, p5: Rss }[key] || Star
                     return (
@@ -248,7 +250,7 @@ export default function ExecutivePage() {
                         </div>
                         <p className="text-[11px] font-semibold text-ink-200">{cfg.label}</p>
                         <p className="text-2xl font-bold mt-1" style={{ color: cfg.color }}>{pct}%</p>
-                        <p className="text-[10px] text-[#A09388]">{pDone}/{pTasks.length} tasks</p>
+                        <p className="text-[10px] text-[#A09388]">{pDone}/{pTasks.length} {t.executive.tasksSuffix}</p>
                         <div className="h-1 bg-cream-200 rounded-full overflow-hidden mt-2">
                           <div className="h-full rounded-full" style={{ width: `${pct}%`, background: cfg.color }} />
                         </div>

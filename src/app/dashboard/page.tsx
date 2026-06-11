@@ -2,7 +2,7 @@
 import { useStore } from '@/lib/store'
 import { useT } from '@/lib/i18n'
 import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate, formatTime } from '@/lib/utils'
-import { getTodayBoth } from '@/lib/jalali'
+import { getTodayBoth, getLocalToday } from '@/lib/jalali'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { BurnoutAlert } from '@/components/shared/BurnoutAlert'
@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const { tasks, events, ieltsSessions, migrations, students, language, completedEventIds, toggleEventComplete } = useStore()
   const t = useT()
   const { gregorian, jalaliShort } = getTodayBoth()
-  const today = new Date().toISOString().split('T')[0]
+  const today = getLocalToday()
   const isRtl = language === 'fa'
 
   // Today's focus tasks — sorted by priority order

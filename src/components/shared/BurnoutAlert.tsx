@@ -4,6 +4,8 @@ import { useT } from '@/lib/i18n'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, X } from 'lucide-react'
 import { useState } from 'react'
+import { getLocalToday } from '@/lib/jalali'
+import { toLocalDateStr } from '@/lib/utils'
 
 export function BurnoutAlert() {
   const { tasks, ieltsSessions } = useStore()
@@ -15,12 +17,12 @@ export function BurnoutAlert() {
   weekStart.setDate(today.getDate() - today.getDay())
 
   const overdueTasks = tasks.filter(t =>
-    t.dueDate && t.dueDate < today.toISOString().split('T')[0] &&
+    t.dueDate && t.dueDate < getLocalToday() &&
     t.status !== 'done' && t.status !== 'cancelled'
   ).length
 
   const inProgressCount = tasks.filter(t => t.status === 'in-progress').length
-  const weekIELTS = ieltsSessions.filter(s => s.date >= weekStart.toISOString().split('T')[0]).length
+  const weekIELTS = ieltsSessions.filter(s => s.date >= toLocalDateStr(weekStart)).length
   const totalEstimatedHours = tasks
     .filter(t => t.status !== 'done' && t.status !== 'cancelled' && t.estimatedTime)
     .reduce((a, t) => a + (t.estimatedTime || 0), 0) / 60

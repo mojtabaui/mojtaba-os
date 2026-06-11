@@ -95,8 +95,10 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: { mobileOpen?: bo
   }
   const c = sidebarCollapsed
 
+  const _ld = new Date()
+  const localToday = `${_ld.getFullYear()}-${String(_ld.getMonth()+1).padStart(2,'0')}-${String(_ld.getDate()).padStart(2,'0')}`
   const todayTasks = tasks.filter(t =>
-    t.dueDate === new Date().toISOString().split('T')[0] &&
+    t.dueDate === localToday &&
     t.status !== 'done' && t.status !== 'cancelled'
   ).length
 

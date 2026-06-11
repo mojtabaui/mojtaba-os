@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate } from '@/lib/utils'
+import { PRIORITY_CONFIG, STATUS_CONFIG, formatDate, toLocalDateStr } from '@/lib/utils'
 import type { Priority } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
 import { CalendarDays, CheckCircle2, Circle, ChevronLeft, ChevronRight, Flame, AlertCircle } from 'lucide-react'
@@ -36,8 +36,8 @@ export default function WeeklyPage() {
   const [reflections, setReflections] = useState({ well: '', blocked: '', improve: '' })
 
   const { start, end } = getWeekRange(weekOffset)
-  const startStr = start.toISOString().split('T')[0]
-  const endStr = end.toISOString().split('T')[0]
+  const startStr = toLocalDateStr(start)
+  const endStr = toLocalDateStr(end)
   const isCurrentWeek = weekOffset === 0
 
   const weekLabel = `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
@@ -65,7 +65,7 @@ export default function WeeklyPage() {
     return d
   })
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = toLocalDateStr(new Date())
 
   return (
     <AppShell>
@@ -125,7 +125,7 @@ export default function WeeklyPage() {
               <h2 className="text-[13px] font-semibold text-ink-200 mb-4">Week Grid</h2>
               <div className="grid grid-cols-7 gap-2">
                 {days.map((day, i) => {
-                  const dateStr = day.toISOString().split('T')[0]
+                  const dateStr = toLocalDateStr(day)
                   const dayTasks = tasks.filter(task => task.dueDate === dateStr)
                   const isToday = dateStr === today
                   const isPast = dateStr < today

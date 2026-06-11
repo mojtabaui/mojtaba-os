@@ -52,6 +52,13 @@ export function isToday(date: Date): boolean {
     date.getFullYear() === today.getFullYear()
 }
 
+// Formats a Date as YYYY-MM-DD using LOCAL time (not UTC).
+// Critical fix for Iran (UTC+3:30): d.toISOString() gives UTC date
+// which can be the previous calendar day before 03:30 AM local time.
+export function toLocalDateStr(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 export function isSameDay(a: Date, b: Date): boolean {
   return a.getDate() === b.getDate() &&
     a.getMonth() === b.getMonth() &&
