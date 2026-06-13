@@ -227,8 +227,7 @@ export default function ContentPage() {
           </div>
 
           {/* Pipeline view */}
-          {view === 'pipeline' && (
-            <div className="overflow-x-auto">
+          <div className="overflow-x-auto">
               <div className="flex gap-4 min-w-max">
                 {PIPELINE.map(stage => {
                   const stageItems = filtered.filter(c => c.status === stage.status)
@@ -258,8 +257,7 @@ export default function ContentPage() {
                   )
                 })}
               </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
 
