@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { STATUS_CONFIG, formatDate } from '@/lib/utils'
+import { STATUS_CONFIG, formatDate, formatTime } from '@/lib/utils'
 import { AppShell } from '@/components/layout/AppShell'
 import { Briefcase, CheckCircle2, Clock, Circle, Calendar } from 'lucide-react'
 import { useT } from '@/lib/i18n'
